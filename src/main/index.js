@@ -1,10 +1,12 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import path from 'path'
 import fs from 'fs'
 import { promisify } from 'util'
-import path from 'path'
+
+// Import icon from resources directory
+import icon from '../../resources/icon.png?asset'
 
 const writeFileAsync = promisify(fs.writeFile)
 const readFileAsync = promisify(fs.readFile)
@@ -37,7 +39,7 @@ function createWindow() {
     height: 768,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    icon: icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -176,3 +178,4 @@ function setupJournalHandlers() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+

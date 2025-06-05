@@ -1,0 +1,26 @@
+Instructions for replacing app icon:
+
+1. For optimal results, convert the quill SVGs to proper icon formats:
+   - icon.ico for Windows (should be 256x256 pixels)
+   - icon.png for cross-platform (should be 512x512 or 1024x1024 pixels)
+   - icon.icns for macOS
+
+2. Place these files in the 'build' directory
+
+3. Make sure the main process imports and uses the correct icon:
+   ```js
+   import icon from '../../build/icon.png?asset'
+   
+   // In createWindow function
+   const mainWindow = new BrowserWindow({
+     ...
+     icon: icon,
+     ...
+   })
+   ```
+
+4. The application should display the icon when:
+   - Running in development mode
+   - In the taskbar
+   - In window decorations
+   - When packaged as a distributable

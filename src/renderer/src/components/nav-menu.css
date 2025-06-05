@@ -1,4 +1,71 @@
-/* Modern and astonishing navigation menu styles */
+/* Modern and astonishing navigation menu */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* App title layout with logo */
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Logo container and styling */
+.logo-container {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon {
+  width: 100%;
+  height: 100%;
+  color: #2563eb; /* Blue color for light mode */
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.3));
+  transition: transform 0.3s ease, filter 0.3s ease;
+  animation: logoEntrance 0.8s ease-out forwards;
+}
+
+@keyframes logoEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+.logo-container:hover .logo-icon {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.5));
+  animation: quillWriteAnimation 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes quillWriteAnimation {
+  0% {
+    transform: scale(1.05) rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: scale(1.08) rotate(2deg) translateY(-2px);
+  }
+  50% {
+    transform: scale(1.09) rotate(-1deg) translateY(1px);
+  }
+  75% {
+    transform: scale(1.1) rotate(-2deg) translateY(0);
+  }
+  100% {
+    transform: scale(1.12) rotate(5deg) translateY(-3px);
+  }
+}
+
+/* Astonishing app title with 3D effect */
 
 /* Header background with animated gradient - light mode */
 .app-header {
@@ -327,6 +394,16 @@
 
 [data-theme="dark"] .app-header h1::before {
   box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 1);
+}
+
+/* Dark mode logo styling */
+[data-theme="dark"] .logo-icon {
+  color: rgba(var(--accent-primary-rgb), 1);
+  filter: drop-shadow(0 0 10px rgba(var(--accent-primary-rgb), 0.6));
+}
+
+[data-theme="dark"] .logo-container:hover .logo-icon {
+  filter: drop-shadow(0 0 15px rgba(var(--accent-primary-rgb), 0.8));
 }
 
 /* Add icons to navigation links */
