@@ -3,7 +3,8 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { ThemeContext } from '../context/ThemeContext'
 import MouseTracker from './MouseTracker'
 import { IoSunny, IoMoon, IoHomeOutline, IoAddOutline } from 'react-icons/io5'
-import featherQuill from '../assets/feather-quill.svg'
+import featherQuill from '../../../../resources/icon.png'
+
 import './nav-menu.css'
 
 function Layout() {
@@ -17,7 +18,7 @@ function Layout() {
       <header className="app-header">
         <div className="app-title">
           <div className="logo-container">
-            <img src={featherQuill} alt="Feather Quill" className="logo-icon" />
+            <img src={featherQuill} alt="Feather Quill" className="logo-icon" style={{borderRadius: "50px"}} />
           </div>
           <h1>DAILY Journal</h1>
         </div>
