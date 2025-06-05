@@ -2,7 +2,6 @@
   "name": "DAILY",
   "version": "1.0.0",
   "description": "DAILY application",
-
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
@@ -25,7 +24,6 @@
     "gray-matter": "^4.0.3",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.1"
-
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^2.0.0",
