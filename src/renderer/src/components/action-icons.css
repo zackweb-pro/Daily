@@ -82,6 +82,12 @@
   font-size: 1.25rem;
   transition: transform 0.2s ease;
 }
+.edit-button .action-icon{
+    color:rgb(0, 255, 255);
+}
+.delete-button .action-icon {
+  color: rgb(255, 68, 68);
+}
 
 .edit-button:hover .action-icon,
 .delete-button:hover .action-icon {
