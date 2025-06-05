@@ -2,6 +2,7 @@ appId: com.electron.DAILY
 productName: DAILY
 directories:
   buildResources: build
+icon: build/icon.png
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -40,3 +41,4 @@ npmRebuild: false
 publish:
   provider: generic
   url: https://example.com/auto-updates
+
