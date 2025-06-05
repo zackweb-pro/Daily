@@ -1,0 +1,149 @@
+/* Enhanced 3D Card Effects */
+
+.enhanced-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  perspective: 1000px;
+  will-change: transform;
+}
+
+/* Subtle 3D tilt effect on hover */
+.enhanced-card:hover {
+  transform: 
+    perspective(1000px)
+    rotateX(var(--tilt-x, 0))
+    rotateY(var(--tilt-y, 0))
+    translateZ(5px);
+}
+
+/* Reflective surface effect that moves with mouse */
+.card-reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.05) 10%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  opacity: 0;
+  border-radius: inherit;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.enhanced-card:hover .card-reflection {
+  opacity: 0.5;
+}
+
+/* Subtle glow effect */
+.card-glow {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(var(--accent-primary-rgb, 52, 152, 219), 0.15),
+    transparent 70%
+  );
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  border-radius: inherit;
+  filter: blur(15px);
+  pointer-events: none;
+}
+
+.enhanced-card:hover .card-glow {
+  opacity: 1;
+}
+
+/* Modern tag styling */
+.modern-tag {
+  display: inline-flex;
+  position: relative;
+  padding: 0.15rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--accent-primary);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  z-index: 1;
+  margin: 0.15rem;
+}
+
+.modern-tag:hover {
+  transform: translateY(-1px);
+  color: #fff;
+  background-color: var(--accent-primary);
+  box-shadow: 0 2px 5px rgba(var(--accent-primary-rgb), 0.25);
+}
+
+.tag-glow {
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  z-index: 0;
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.modern-tag:hover .tag-glow {
+  transform: translateX(100%);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .card-reflection {
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.03) 10%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0) 50%
+  );
+}
+
+[data-theme="dark"] .modern-tag {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .modern-tag:hover {
+  background-color: var(--accent-primary);
+  color: #fff;
+}
+
+/* Animation for staggered entrance */
+@keyframes enhancedEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.entries-list .enhanced-card {
+  animation: enhancedEntrance 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--delay, 0) * 0.1s);
+}

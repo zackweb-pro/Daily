@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import { format, isValid } from 'date-fns'
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
+function EditIcon() {
+  return <FiEdit className="action-icon" />
+}
+
+function DeleteIcon() {
+  return <FiTrash2 className="action-icon" />
+}
 function JournalViewer() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -123,8 +131,8 @@ function JournalViewer() {
           )}
         </div>
         <div className="viewer-actions">
-          <Link to={`/edit/${id}`} className="edit-button">Edit</Link>
-          <button onClick={handleDelete} className="delete-button">Delete</button>
+          <Link to={`/edit/${id}`} className="edit-button"><EditIcon  /></Link>
+          <button onClick={handleDelete} className="delete-button"><DeleteIcon  /></button>
           <Link to="/" className="back-button">Back to List</Link>
         </div>
       </div>
