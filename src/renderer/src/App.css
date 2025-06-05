@@ -1,6 +1,5 @@
-/* Import modern card enhancements and animations */
+/* Import modern card enhancements */
 @import url('./modern-cards.css');
-@import url('./animations.css');
 
 /* CSS Variables for theming */
 :root {
@@ -229,6 +228,16 @@ body {
   color: var(--text-muted);
 }
 
+.search-container::before {
+  content: "🔍";
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
 
 .search-clear {
   position: absolute;
@@ -276,6 +285,11 @@ body {
   gap: 0.5rem;
 }
 
+.clear-filters-button::before {
+  content: "🔄";
+  font-size: 0.9rem;
+}
+
 .clear-filters-button:hover {
   background-color: var(--accent-primary);
   color: white;
@@ -283,7 +297,7 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-/* .category-filter {
+.category-filter {
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -299,7 +313,7 @@ body {
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
   appearance: none;
-} */
+}
 
 .category-filter:hover {
   border-color: var(--accent-primary);
