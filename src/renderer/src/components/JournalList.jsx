@@ -1,89 +1,82 @@
-﻿// filepath: c:\Users\zackweb\Desktop\Dailly\src\renderer\src\components\JournalList.jsx
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { format, isValid } from "date-fns";
-import { EnhancedCard } from "./EnhancedCardEffects";          {/* Results count indicator */}
-import CategoryDisplay from "./CategoryDisplay";
-import { FiSearch, FiX, FiFilter, FiRefreshCw, FiChevronDown, FiTag, FiEdit, FiTrash2 } from "react-icons/fi";
-import "./enhanced-card.css";
-import "./date-and-categories.css";
-import "./advanced-filters.css";
-import "./action-icons.css";
-import "./new-entry-button.css";
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { format, isValid } from 'date-fns'
 
-// Modern edit and delete icons using react-icons instead of SVGs
+// Lucidchart-inspired SVG icons for edit and delete
 function EditIcon() {
-  return <FiEdit className="action-icon" />
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="action-icon">
+      <rect x="3" y="14.5" width="14" height="2" rx="1" fill="var(--accent-primary)" />
+      <path d="M14.1 4.1a1.5 1.5 0 0 1 2.12 2.12l-8.5 8.5-2.62.5.5-2.62 8.5-8.5z" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" />
+    </svg>
+  )
 }
-
 function DeleteIcon() {
-  return <FiTrash2 className="action-icon" />
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="action-icon">
+      <rect x="5" y="6" width="10" height="10" rx="2" fill="none" stroke="var(--accent-danger)" strokeWidth="1.5" />
+      <path d="M8 9v4M12 9v4" stroke="var(--accent-danger)" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="7" y="3" width="6" height="2" rx="1" fill="var(--accent-danger)" />
+    </svg>
+  )
 }
 
 function JournalList() {
-  const [entries, setEntries] = useState([]);
-  const [filteredEntries, setFilteredEntries] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const [sortDirection, setSortDirection] = useState("desc"); // "desc" = newest first, "asc" = oldest first
-  const [showSearchPing, setShowSearchPing] = useState(false);
+  const [entries, setEntries] = useState([])
+  const [filteredEntries, setFilteredEntries] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [categories, setCategories] = useState([])
   
   useEffect(() => {
-    loadEntries();
-  }, []);
+    loadEntries()
+  }, [])
   
   useEffect(() => {
-    filterEntries();
-    // Check if any filters are applied
-    setIsFiltering(searchTerm !== "" || selectedCategory !== "");
-  }, [searchTerm, selectedCategory, entries]);
+    filterEntries()
+  }, [searchTerm, selectedCategory, entries])
   
   const loadEntries = async () => {
     try {
-      const allEntries = await window.api.journal.getAll();
+      const allEntries = await window.api.journal.getAll()
       
       // Parse frontmatter manually
-      const parsedEntries = allEntries.map((entry) => {
-        const lines = entry.content.split("\n");
-        let frontMatterFound = false;
-        let frontMatterEnd = -1;
-        let title = "Untitled Entry";
-        let date = new Date();
-        let categories = [];
+      const parsedEntries = allEntries.map(entry => {
+        const lines = entry.content.split('\n')
+        let frontMatterFound = false
+        let frontMatterEnd = -1
+        let title = 'Untitled Entry'
+        let date = new Date()
+        let categories = []
         
         // Find YAML frontmatter between --- markers
-        if (lines[0] === "---") {
-          frontMatterFound = true;
+        if (lines[0] === '---') {
+          frontMatterFound = true
           for (let i = 1; i < lines.length; i++) {
-            if (lines[i] === "---") {
-              frontMatterEnd = i;
-              break;
+            if (lines[i] === '---') {
+              frontMatterEnd = i
+              break
             }
             
-            const line = lines[i];
-            if (line.startsWith("title:")) {
-              title = line.substring(6).trim();
-            } else if (line.startsWith("date:")) {
-              const dateStr = line.substring(5).trim();
-              date = new Date(dateStr);
-            } else if (line.startsWith("categories:")) {
-              const catText = line.substring(11).trim();
-              if (catText.startsWith("[") && catText.endsWith("]")) {
-                categories = catText
-                  .slice(1, -1)
-                  .split(",")
-                  .map((c) => c.trim());
+            const line = lines[i]
+            if (line.startsWith('title:')) {
+              title = line.substring(6).trim()
+            } else if (line.startsWith('date:')) {
+              const dateStr = line.substring(5).trim()
+              date = new Date(dateStr)
+            } else if (line.startsWith('categories:')) {
+              const catText = line.substring(11).trim()
+              if (catText.startsWith('[') && catText.endsWith(']')) {
+                categories = catText.slice(1, -1).split(',').map(c => c.trim())
               }
             }
           }
         }
         
         // Extract content after frontmatter
-        let content = entry.content;
+        let content = entry.content
         if (frontMatterFound && frontMatterEnd > 0) {
-          content = lines.slice(frontMatterEnd + 1).join("\n");
+          content = lines.slice(frontMatterEnd + 1).join('\n')
         }
         
         return {
@@ -91,88 +84,72 @@ function JournalList() {
           title,
           date,
           categories,
-          excerpt: content.substring(0, 100) + (content.length > 100 ? "..." : ""),
+          excerpt: content.substring(0, 100) + (content.length > 100 ? '...' : ''),
           parsed: true
-        };
-      });
+        }
+      })
       
-      // Sort by date based on sort direction
-      parsedEntries.sort((a, b) => {
-        const comparison = new Date(a.date) - new Date(b.date);
-        return sortDirection === "asc" ? comparison : -comparison;
-      });
+      // Sort by date (newest first)
+      parsedEntries.sort((a, b) => new Date(b.date) - new Date(a.date))
       
-      setEntries(parsedEntries);
-      setFilteredEntries(parsedEntries); // Initialize filtered entries with all entries
+      setEntries(parsedEntries)
+      setFilteredEntries(parsedEntries) // Initialize filtered entries with all entries
       
       // Extract unique categories
-      const allCategories = new Set();
-      parsedEntries.forEach((entry) => {
+      const allCategories = new Set()
+      parsedEntries.forEach(entry => {
         if (Array.isArray(entry.categories)) {
-          entry.categories.forEach((cat) => allCategories.add(cat));
+          entry.categories.forEach(cat => allCategories.add(cat))
         }
-      });
-      setCategories([...allCategories]);
+      })
+      setCategories([...allCategories])
     } catch (error) {
-      console.error("Failed to load entries:", error);
+      console.error('Failed to load entries:', error)
     }
-  };
+  }
   
   const filterEntries = () => {
-    let filtered = [...entries];
+    let filtered = [...entries]
     
     // Filter by search term
-    if (searchTerm && searchTerm.trim() !== "") {
-      const searchLower = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((entry) => 
+    if (searchTerm && searchTerm.trim() !== '') {
+      const searchLower = searchTerm.toLowerCase().trim()
+      filtered = filtered.filter(entry => 
         (entry.title && entry.title.toLowerCase().includes(searchLower)) || 
         (entry.content && entry.content.toLowerCase().includes(searchLower)) ||
         (entry.excerpt && entry.excerpt.toLowerCase().includes(searchLower))
-      );
+      )
     }
     
     // Filter by category
     if (selectedCategory) {
-      filtered = filtered.filter((entry) => 
+      filtered = filtered.filter(entry => 
         Array.isArray(entry.categories) && entry.categories.includes(selectedCategory)
-      );
+      )
     }
     
-    console.log("Filtering entries:", {
+    console.log('Filtering entries:', {
       searchTerm,
       selectedCategory,
       totalEntries: entries.length,
       filteredCount: filtered.length
-    });
+    })
     
-    setFilteredEntries(filtered);
-  };
+    setFilteredEntries(filtered)
+  }
   
-  // Enhanced date formatting function with more beautiful output
+  // Safe format function to handle potentially invalid dates
   const formatDate = (dateValue) => {
     // Check if the date is valid first
     const date = new Date(dateValue);
     if (!dateValue || !isValid(date)) {
-      return "No date";
+      return 'No date';
     }
     try {
-      const day = format(date, "d");
-      const month = format(date, "MMM");
-      const year = format(date, "yyyy");
-      
-      // Return a structured date format that can be styled more beautifully
-      return (
-        <span className="beautiful-date">
-          <span className="date-day">{day}</span>
-          <span className="date-month-year">
-            <span className="date-month">{month}</span>
-            <span className="date-year">{year}</span>
-          </span>
-        </span>
-      );
+      return format(date, 'MMMM d, yyyy');
     } catch (error) {
-      console.error("Date formatting error:", error);
-      return "Invalid date";
+      console.error('Date formatting error:', error);
+      return 'Invalid date';
     }
   };
 
@@ -180,153 +157,98 @@ function JournalList() {
     setSearchTerm(e.target.value);
   };
   
-  // Handle search with animation
-  const handleSearchWithAnimation = (e) => {
-    handleSearch(e);
-    setShowSearchPing(true);
-    setTimeout(() => setShowSearchPing(false), 800); // Animation duration
-  };
-  
-  // Toggle sort direction
-  const toggleSortDirection = () => {
-    const newDirection = sortDirection === "desc" ? "asc" : "desc";
-    setSortDirection(newDirection);
-    
-    // Re-sort entries
-    const sorted = [...filteredEntries].sort((a, b) => {
-      const comparison = new Date(a.date) - new Date(b.date);
-      return newDirection === "asc" ? comparison : -comparison;
-    });
-    
-    setFilteredEntries(sorted);
-  };
-  
   const handleDelete = async (id, e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
     
-    if (confirm("Are you sure you want to delete this entry?")) {
+    if (confirm('Are you sure you want to delete this entry?')) {
       try {
-        await window.api.journal.deleteEntry(id);
-        loadEntries();
+        await window.api.journal.deleteEntry(id)
+        loadEntries()
       } catch (error) {
-        console.error("Failed to delete entry:", error);
+        console.error('Failed to delete entry:', error)
       }
     }
-  };
-
+  }
+  
   return (
     <div className="journal-list">
-      <div className="filters-container">
-        <div className={`filters ${isFiltering ? "has-filters active" : ""}`}>
-          {isFiltering && <div className="filter-active-indicator"></div>}
-          
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search entries..."
-              value={searchTerm}
-              onChange={handleSearchWithAnimation}
-              className="search-input"
-            />
-            <FiSearch className="search-icon" />
-            {showSearchPing && <div className="search-ping animate"></div>}
-            {searchTerm && (
-              <button className="search-clear" onClick={() => setSearchTerm("")} aria-label="Clear search">
-                <FiX />
-              </button>
-            )}
-          </div>
-          
-          <div className="category-filter-container">
-            <select
-              style={{ WebkitAppearance: "none !important", MozAppearance: "none !important", appearance: "none !important" }}
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="category-filter"
-            >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-            <FiFilter className="category-icon" />
-          </div>
-          
-          <button 
-            onClick={toggleSortDirection} 
-            className={`sort-button ${sortDirection}`}
-            aria-label={`Sort by date ${sortDirection === "desc" ? "oldest first" : "newest first"}`}
-          >
-            <FiChevronDown className="sort-icon" />
-            <span>Sort: {sortDirection === "desc" ? "Newest" : "Oldest"}</span>
-          </button>
-          
-          {isFiltering && (
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setSelectedCategory("");
-              }}
-              className="clear-filters-button"
-              aria-label="Clear all filters"
-            >
-              <FiRefreshCw className="button-icon" />
-              <span>Reset Filters</span>
+      <div className="filters">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search entries..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-input"
+          />
+          {searchTerm && (
+            <button className="search-clear" onClick={() => setSearchTerm('')}>
+              ✕
             </button>
           )}
-          
-          {/* Results count indicator */}
-          <div className="filter-results-count">
-            <span className="count-icon">
-              {isFiltering ? <FiFilter size={16} /> : <FiTag size={16} />}
-            </span>
-            <span><strong>{filteredEntries.length}</strong> {filteredEntries.length === 1 ? "entry" : "entries"}</span>
-          </div>
         </div>
+        
+        <select 
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="category-filter"
+        >
+          <option value="">All Categories</option>
+          {categories.map(category => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
+        
+        <button onClick={() => { setSearchTerm(''); setSelectedCategory('') }} className="clear-filters-button">
+          Clear Filters
+        </button>
       </div>
       
       <div className="entries-list">
         {filteredEntries.length === 0 ? (
           <p className="no-entries">No journal entries found</p>
         ) : (
-          filteredEntries.map((entry, index) => (
-            <EnhancedCard key={entry.id} className="entry-card" delay={index}>
-              <Link to={`/view/${entry.id}`} className="entry-link">
-                <h3 className="entry-title">{entry.title}</h3>
-                <div className="entry-meta">
-                  <span className="entry-date">{formatDate(entry.date)}</span>
-                  {entry.categories && entry.categories.length > 0 && (
-                    <CategoryDisplay categories={entry.categories} maxVisible={2} />
-                  )}
-                </div>
-                <p className="entry-excerpt">{entry.excerpt}</p>
-              </Link>
-              <div className="entry-actions entry-actions-bottom">
-                <Link to={`/edit/${entry.id}`} className="edit-button" title="Edit">
-                  <EditIcon />
+          filteredEntries.map((entry, index) => {
+            return (
+              <div key={entry.id} className="entry-card" style={{"--delay": index}}>
+                <Link to={`/view/${entry.id}`} className="entry-link">
+                  <h3 className="entry-title">{entry.title}</h3>
+                  <div className="entry-meta">
+                    <span className="entry-date">{formatDate(entry.date)}</span>
+                    {entry.categories && entry.categories.length > 0 && (
+                      <div className="entry-categories astonish-categories">
+                        {entry.categories.map((cat) => (
+                          <span key={cat} className="category-tag astonish-category-tag">{cat}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="entry-excerpt">{entry.excerpt}</p>
                 </Link>
-                <button 
-                  onClick={(e) => handleDelete(entry.id, e)} 
-                  className="delete-button"
-                  title="Delete"
-                >
-                  <DeleteIcon />
-                </button>
+                <div className="entry-actions entry-actions-bottom">
+                  <Link to={`/edit/${entry.id}`} className="edit-button" title="Edit">
+                    <EditIcon />
+                  </Link>
+                  <button 
+                    onClick={(e) => handleDelete(entry.id, e)} 
+                    className="delete-button"
+                    title="Delete"
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
               </div>
-            </EnhancedCard>
-          ))
+            )
+          })
         )}
       </div>
       
       <Link to="/new" className="new-entry-button">
-        <FiEdit className="new-entry-button-icon" />
-        <span>New Journal Entry</span>
+        New Journal Entry
       </Link>
     </div>
-  );
+  )
 }
 
-export default JournalList;
+export default JournalList
