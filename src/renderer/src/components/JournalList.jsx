@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { format, isValid } from "date-fns";
-import { EnhancedCard } from "./EnhancedCardEffects";
+import { EnhancedCard } from "./EnhancedCardEffects";          {/* Results count indicator */}
 import CategoryDisplay from "./CategoryDisplay";
 import { FiSearch, FiX, FiFilter, FiRefreshCw, FiChevronDown, FiTag, FiEdit, FiTrash2 } from "react-icons/fi";
 import "./enhanced-card.css";
@@ -239,7 +239,8 @@ function JournalList() {
           </div>
           
           <div className="category-filter-container">
-            <select 
+            <select
+              style={{ WebkitAppearance: "none !important", MozAppearance: "none !important", appearance: "none !important" }}
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="category-filter"
@@ -280,7 +281,7 @@ function JournalList() {
           {/* Results count indicator */}
           <div className="filter-results-count">
             <span className="count-icon">
-              {isFiltering ? <FiFilter /> : <FiTag />}
+              {isFiltering ? <FiFilter size={16} /> : <FiTag size={16} />}
             </span>
             <span><strong>{filteredEntries.length}</strong> {filteredEntries.length === 1 ? "entry" : "entries"}</span>
           </div>
