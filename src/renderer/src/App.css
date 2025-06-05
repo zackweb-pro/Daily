@@ -1,5 +1,6 @@
-/* Import modern card enhancements */
+/* Import modern card enhancements and animations */
 @import url('./modern-cards.css');
+@import url('./animations.css');
 
 /* CSS Variables for theming */
 :root {

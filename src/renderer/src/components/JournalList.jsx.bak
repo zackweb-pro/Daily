@@ -9,7 +9,6 @@ import "./enhanced-card.css";
 import "./date-and-categories.css";
 import "./advanced-filters.css";
 import "./action-icons.css";
-import "./new-entry-button.css";
 
 // Modern edit and delete icons using react-icons instead of SVGs
 function EditIcon() {
@@ -96,11 +95,8 @@ function JournalList() {
         };
       });
       
-      // Sort by date based on sort direction
-      parsedEntries.sort((a, b) => {
-        const comparison = new Date(a.date) - new Date(b.date);
-        return sortDirection === "asc" ? comparison : -comparison;
-      });
+      // Sort by date (newest first)
+      parsedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
       
       setEntries(parsedEntries);
       setFilteredEntries(parsedEntries); // Initialize filtered entries with all entries
@@ -180,6 +176,11 @@ function JournalList() {
     setSearchTerm(e.target.value);
   };
   
+  // State for search ping animation
+  const [showSearchPing, setShowSearchPing] = useState(false);
+  // State for sort direction
+  const [sortDirection, setSortDirection] = useState("desc"); // "desc" = newest first, "asc" = oldest first
+
   // Handle search with animation
   const handleSearchWithAnimation = (e) => {
     handleSearch(e);
@@ -254,15 +255,6 @@ function JournalList() {
             <FiFilter className="category-icon" />
           </div>
           
-          <button 
-            onClick={toggleSortDirection} 
-            className={`sort-button ${sortDirection}`}
-            aria-label={`Sort by date ${sortDirection === "desc" ? "oldest first" : "newest first"}`}
-          >
-            <FiChevronDown className="sort-icon" />
-            <span>Sort: {sortDirection === "desc" ? "Newest" : "Oldest"}</span>
-          </button>
-          
           {isFiltering && (
             <button
               onClick={() => {
@@ -282,7 +274,7 @@ function JournalList() {
             <span className="count-icon">
               {isFiltering ? <FiFilter /> : <FiTag />}
             </span>
-            <span><strong>{filteredEntries.length}</strong> {filteredEntries.length === 1 ? "entry" : "entries"}</span>
+            <span>{filteredEntries.length} {filteredEntries.length === 1 ? 'entry' : 'entries'}</span>
           </div>
         </div>
       </div>
@@ -321,8 +313,7 @@ function JournalList() {
       </div>
       
       <Link to="/new" className="new-entry-button">
-        <FiEdit className="new-entry-button-icon" />
-        <span>New Journal Entry</span>
+        New Journal Entry
       </Link>
     </div>
   );
