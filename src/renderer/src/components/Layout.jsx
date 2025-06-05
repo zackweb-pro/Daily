@@ -3,6 +3,8 @@ import React, { useContext } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { ThemeContext } from '../context/ThemeContext'
 import MouseTracker from './MouseTracker'
+import { IoSunny } from "react-icons/io5";
+import { IoMoon } from "react-icons/io5";
 
 function Layout() {
   const { theme, toggleTheme } = useContext(ThemeContext)
@@ -20,7 +22,7 @@ function Layout() {
             <NavLink to="/new">New Entry</NavLink>
           </nav>
           <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
-            {theme === 'light' ? '🌙' : '☀️'}
+            {theme === 'light' ? <IoMoon /> : <IoSunny />}
           </button>
         </div>
       </header>
