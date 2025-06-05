@@ -1,0 +1,174 @@
+﻿/* filepath: c:\Users\zackweb\Desktop\Dailly\src\renderer\src\components\date-and-categories.css */
+/* Beautiful Date Styling */
+.beautiful-date {
+  display: flex;
+  align-items: center;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-primary);
+  gap: 0.2rem;
+  position: relative;
+  margin-right: 0.75rem;
+}
+
+.date-day {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  line-height: 1;
+  position: relative;
+}
+
+.date-month-year {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  line-height: 1.1;
+  padding-left: 0.15rem;
+}
+
+.date-month {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.date-year {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* Entry meta container for date and categories */
+.entry-meta {
+  display: flex;
+  align-items: flex-start;
+  margin: 0.5rem 0 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Category styling with overflow support */
+.entry-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.category-overflow {
+  position: relative;
+}
+
+/* Container for the counter and tooltip */
+.counter-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Counter styling */
+.categories-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  border: 1px dashed var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.counter-container:hover .categories-counter {
+  background: var(--accent-primary);
+  color: white;
+  border-style: solid;
+  transform: translateY(-1px);
+}
+
+/* Tooltip styling */
+.categories-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+  min-width: 150px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border: 1px solid var(--border-color);
+  animation: fadeIn 0.2s ease-out;
+  white-space: normal;
+}
+
+/* Arrow pointing to the counter */
+.categories-tooltip:before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  z-index: -1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-5px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .categories-tooltip {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .categories-tooltip:before {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .date-day {
+  color: var(--accent-primary);
+}
+
+/* Media queries to handle small screens */
+@media (max-width: 640px) {
+  .entry-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .beautiful-date {
+    margin-bottom: 0.25rem;
+  }
+
+  .categories-tooltip {
+    left: 0;
+    transform: none;
+    min-width: 120px;
+  }
+  
+  .categories-tooltip:before {
+    left: 20px;
+    transform: rotate(45deg);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
