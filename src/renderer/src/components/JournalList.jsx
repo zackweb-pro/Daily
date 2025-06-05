@@ -2,6 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { format, isValid } from 'date-fns'
 
+// Lucidchart-inspired SVG icons for edit and delete
+function EditIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="action-icon">
+      <rect x="3" y="14.5" width="14" height="2" rx="1" fill="var(--accent-primary)" />
+      <path d="M14.1 4.1a1.5 1.5 0 0 1 2.12 2.12l-8.5 8.5-2.62.5.5-2.62 8.5-8.5z" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" />
+    </svg>
+  )
+}
+function DeleteIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" className="action-icon">
+      <rect x="5" y="6" width="10" height="10" rx="2" fill="none" stroke="var(--accent-danger)" strokeWidth="1.5" />
+      <path d="M8 9v4M12 9v4" stroke="var(--accent-danger)" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="7" y="3" width="6" height="2" rx="1" fill="var(--accent-danger)" />
+    </svg>
+  )
+}
+
 function JournalList() {
   const [entries, setEntries] = useState([])
   const [filteredEntries, setFilteredEntries] = useState([])
@@ -190,33 +209,38 @@ function JournalList() {
         {filteredEntries.length === 0 ? (
           <p className="no-entries">No journal entries found</p>
         ) : (
-          filteredEntries.map(entry => (
-            <div key={entry.id} className="entry-card">
-              <Link to={`/view/${entry.id}`} className="entry-link">
-                <h3 className="entry-title">{entry.title}</h3>
-                <div className="entry-meta">
-                  <span className="entry-date">
-                    {formatDate(entry.date)}
-                  </span>
-                  {entry.categories && entry.categories.length > 0 && (
-                    <div className="entry-categories">
-                      {entry.categories.map(cat => (
-                        <span key={cat} className="category-tag">{cat}</span>
-                      ))}
-                    </div>
-                  )}
+          filteredEntries.map((entry, index) => {
+            return (
+              <div key={entry.id} className="entry-card" style={{"--delay": index}}>
+                <Link to={`/view/${entry.id}`} className="entry-link">
+                  <h3 className="entry-title">{entry.title}</h3>
+                  <div className="entry-meta">
+                    <span className="entry-date">{formatDate(entry.date)}</span>
+                    {entry.categories && entry.categories.length > 0 && (
+                      <div className="entry-categories astonish-categories">
+                        {entry.categories.map((cat) => (
+                          <span key={cat} className="category-tag astonish-category-tag">{cat}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="entry-excerpt">{entry.excerpt}</p>
+                </Link>
+                <div className="entry-actions entry-actions-bottom">
+                  <Link to={`/edit/${entry.id}`} className="edit-button" title="Edit">
+                    <EditIcon />
+                  </Link>
+                  <button 
+                    onClick={(e) => handleDelete(entry.id, e)} 
+                    className="delete-button"
+                    title="Delete"
+                  >
+                    <DeleteIcon />
+                  </button>
                 </div>
-                <p className="entry-excerpt">{entry.excerpt}</p>
-              </Link>
-              <div className="entry-actions">
-                <Link to={`/edit/${entry.id}`} className="edit-button">✏️ Edit</Link>
-                <button 
-                  onClick={(e) => handleDelete(entry.id, e)} 
-                  className="delete-button"
-                >🗑️ Delete</button>
               </div>
-            </div>
-          ))
+            )
+          })
         )}
       </div>
       
